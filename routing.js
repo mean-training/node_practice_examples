@@ -4,13 +4,12 @@ const url  = require('url');
 
 const tempOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`,'utf-8');
 const tempCard     = fs.readFileSync(`${__dirname}/templates/template-card.html`,'utf-8');
-const product      = fs.readFileSync(`${__dirname}/templates/template-product.html`,'utf-8');
+const tempProduct      = fs.readFileSync(`${__dirname}/templates/template-product.html`,'utf-8');
 const data         = fs.readFileSync(`${__dirname}/assets/data.json`,'utf-8');
 const prodData     = JSON.parse(data)
 
 
 const replaceTemplate = (temp,product) => {
-    console.log(product);
     let output = temp.replace(/{%PRODUCTNAME%}/g, product.productName);
     output     = output.replace(/{%IMAGE%}/g, product.image);
     output     = output.replace(/{%PRICE%}/g, product.price);
@@ -24,23 +23,26 @@ const replaceTemplate = (temp,product) => {
 }
 
 const server = http.createServer((req,res) => {
-    console.log(req.url);
-    const pathname = req.url;
+    const {query,pathname} = url.parse(req.url,true);
 
     // Overview Page
     if(pathname == '/' || pathname == '/overview'){
         res.writeHead(200,{'Content-type':'text/html'});
         const cardsHTML = prodData.map(el => replaceTemplate(tempCard,el)).join('');
         const output    = tempOverview.replace(/{%PRODUCT_CARDS%}/g,cardsHTML)
-        console.log(output);
         res.end(output);
+
     // Product Page    
     }else if(pathname == '/product'){
-        res.end("this is the product page");
+        const product = prodData[query.id];
+        const output  = replaceTemplate(tempProduct,product); 
+        res.end(output);
+
     // API    
     }else if(pathname == '/api'){
         res.writeHead(200,{'Content-type' : 'application/json'});
         res.end(data);
+
     // 400 Page
     }else{
         res.writeHead(400,{
@@ -55,3 +57,4 @@ const server = http.createServer((req,res) => {
 server.listen(3000,'127.0.0.1',() => {
     console.log("Listening to request on port 3000");
 });
+

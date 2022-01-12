@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mean-training/node_practice_examples#readme",
   "dependencies": {
+    "lodash": "^4.17.21",
     "slugify": "^1.6.5"
   },
   "devDependencies": {

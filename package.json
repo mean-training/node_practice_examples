@@ -15,5 +15,15 @@
   "bugs": {
     "url": "https://github.com/mean-training/node_practice_examples/issues"
   },
-  "homepage": "https://github.com/mean-training/node_practice_examples#readme"
+  "homepage": "https://github.com/mean-training/node_practice_examples#readme",
+  "dependencies": {
+    "slugify": "^1.6.5"
+  },
+  "devDependencies": {
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "prettier": "^2.5.1"
+  }
 }

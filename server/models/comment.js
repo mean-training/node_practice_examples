@@ -22,5 +22,14 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Comment',
   });
+
+  Comment.associate = (models) => {
+    Comment.belongsTo(models.User, {foreignKey: 'UserId', as: 'user'})
+  }
+
+  Comment.associate = (models) => {
+    Comment.belongsTo(models.Post,{foreignKey:'PostId',as: 'post'})
+  }
+
   return Comment;
 };

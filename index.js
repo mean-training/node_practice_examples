@@ -1,4 +1,5 @@
 // Blocking , synchronous way
+const {Sequelize,DataTypes} = require('sequelize')
 const fs = require('fs');
 const textInp = fs.readFileSync('./txt/input.txt','utf-8');
 console.log(textInp);
@@ -25,3 +26,5 @@ fs.readFile('./txt/start.txt','utf-8' ,(err,data1) => {
         });
     });
 });
+
+

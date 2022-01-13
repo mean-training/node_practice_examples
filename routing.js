@@ -1,6 +1,7 @@
 const fs = require('fs');
 const http = require('http');
 const url  = require('url');
+const {Sequelize,DataTypes} = require('sequelize');
 
 const replaceTemplate = require('./modules/replaceTemplate');
 
@@ -44,5 +45,18 @@ const server = http.createServer((req,res) => {
 
 server.listen(3000,'127.0.0.1',() => {
     console.log("Listening to request on port 3000");
+    // eslint-disable-next-line no-undef
+    const conn = new Sequelize('test_database','zahramumtaz','root',{
+        host: 'localhost',
+        dialect:'postgres'
+    });
+    try{
+        conn.authenticate();
+        console.log('Connection has been established successfully.');
+    }catch(err){
+        console.log('error');
+    }
+    
+    
 });
 

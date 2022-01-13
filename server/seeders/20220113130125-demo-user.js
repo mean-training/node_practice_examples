@@ -21,7 +21,15 @@ module.exports = {
          'createdAt': new Date(),
          'updatedAt': new Date(),
          'is_active' : false
-       }
+       },
+       {
+        'first_name' : "test2",
+        'last_name' : 'user',
+        'email' : 'test2_user@gmail.com',
+        'createdAt': new Date(),
+        'updatedAt': new Date(),
+        'is_active' : false
+      }
      ])
   },
 

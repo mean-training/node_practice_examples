@@ -18,6 +18,9 @@
   "homepage": "https://github.com/mean-training/node_practice_examples#readme",
   "dependencies": {
     "lodash": "^4.17.21",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.13.0",
     "slugify": "^1.6.5"
   },
   "devDependencies": {

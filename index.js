@@ -1,6 +1,29 @@
-// Blocking , synchronous way
+const faker = require('faker');
+const csvWriter = require('csv-write-stream');
 const {Sequelize,DataTypes} = require('sequelize')
 const fs = require('fs');
+
+var writer = csvWriter();
+let count = 0;
+const dataGen = () => {
+    writer.pipe(fs.createWriteStream('data.csv'));
+    for(let i = 0; i < 1000; i++){
+      writer.write({
+        id: count++,
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        email : faker.internet.email(),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+    }
+    writer.end();
+    console.log('done1');
+}
+
+dataGen();
+
+//Blocking , synchronous way
 const textInp = fs.readFileSync('./txt/input.txt','utf-8');
 console.log(textInp);
 
@@ -27,4 +50,8 @@ fs.readFile('./txt/start.txt','utf-8' ,(err,data1) => {
     });
 });
 
-
+const conn = new Sequelize('test_database','zahramumtaz','root',{
+    host: 'localhost',
+    dialect:'postgres'
+});
+conn.authenticate();

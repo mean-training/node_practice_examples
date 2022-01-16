@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  async up(queryInterface, Sequelize) {
     await queryInterface.createTable('TodoItems', {
       id: {
         allowNull: false,
@@ -14,6 +14,15 @@ module.exports = {
       complete: {
         type: Sequelize.BOOLEAN
       },
+      todoId : {
+        type: Sequelize.INTEGER,
+        onDelete:'CASCADE',
+        references:{
+          model:'Todo',
+          key:'id',
+          as: 'todoId'
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -24,7 +33,7 @@ module.exports = {
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
+  async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('TodoItems');
   }
 };

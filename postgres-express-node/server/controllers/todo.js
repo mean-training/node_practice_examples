@@ -33,5 +33,36 @@ module.exports = {
             }
             return res.status(200).send(item)
         }).catch(error => res.status(400).send(error))
+    },
+    update(req,res){
+        return Todo.findOne({
+            where:{
+                id : req.params.todoId
+            },
+            include:[{
+                model: TodoItem,
+                as: 'todoItems'
+            }]
+        }).then(item => {
+            if(!item){
+                res.status(400).send({message:'todo not found'});
+            }
+            return item.update({
+                title: req.body.title || todo.title
+            }).then(() =>  res.status(200).send(item))
+            .catch(error => res.status(401).send(error))
+        }).catch(error => res.status(400).send(error));
+    },
+    destroy(req,res){
+        return Todo.findOne({
+            where:{id:req.params.todoId}
+        })
+        .then(todo => {
+            if(!todo){
+                return res.status(400).send({message:'todo not found'})
+            }
+            return todo.destroy().then(() =>  res.status(204).send())
+            .catch((error) => res.status(400).send(error))
+        })
     }
 }

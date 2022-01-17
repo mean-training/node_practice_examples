@@ -19,7 +19,7 @@ module.exports = {
         .catch((error) => res.status(400).send(error));
     },
     retrieve(req,res){
-        return Todo.findAll({
+        return Todo.findOne({
             where:{
                 id: req.params.todoId
             },

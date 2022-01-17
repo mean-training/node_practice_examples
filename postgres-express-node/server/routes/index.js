@@ -1,18 +1,28 @@
+const express = require('express');
 const todoController = require('../controllers').todo;
 const todoItemController = require('../controllers').todoItem;
+const logger = require('../middlewares/test');
+const router = express.Router();
 
 module.exports = (app) => {
+    app.use(logger.myLogger());
+    app.use('/api/v1/todo', router);
+
     app.get('/api',(req,res) => {
         res.status(201).send({
             message:"Welcome to the todo's app!"
         });
     });
 
-    app.post('/api/todos', todoController.create);
-    app.get('/api/todos',todoController.list);
-    app.post('/api/todo/:todoId/item',todoItemController.create);
-    app.get('/api/todo/:todoId',todoController.retrieve);
-    app.put('/api/todo/:todoId',todoController.update);
-    app.delete('/api/todo/:todoId',todoController.destroy);
+    router.route('/')
+    .get(todoController.list)
+    .post(todoController.create);
+
+    router.route('/:todoId')
+    .get(todoController.retrieve)
+    .put(todoController.update)
+    .delete(todoController.destroy);
+
+    router.post('/api/todo/:todoId/item',todoItemController.create);
 
 }

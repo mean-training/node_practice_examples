@@ -1,11 +1,14 @@
 const express            = require('express');
-const todoController     = require('../controllers').todo;
-const todoItemController = require('../controllers').todoItem;
+const todoController     = require('../controllers/todo');
+const todoItemController = require('../controllers/todoItem');
 const todoRouter = express.Router();
+const { validationRule, validate } = require('../middlewares/validate')
 
-todoRouter.route('/')
-.get(todoController.list)
-.post(todoController.create);
+todoRouter.get('/',todoController.list);
+todoRouter.post('/',
+validationRule(),
+validate,
+todoController.create);
 
 
 todoRouter.route('/:todoId')

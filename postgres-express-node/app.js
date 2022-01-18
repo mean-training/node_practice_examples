@@ -2,7 +2,9 @@ const express    = require('express');
 const logger     = require('morgan');
 const bodyParser = require('body-parser');
 const todoRoutes = require('./server/routes/todoRoutes');
-const addLogs    = require('./server/middlewares/test')
+const addLogs    = require('./server/middlewares/test');
+const { logTodo } = require('./server/console/commands/todo');
+const cron       = require('./server/console/commands/todo')();
 
 // Set up the express app
 const app = express();

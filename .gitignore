@@ -6,3 +6,5 @@ package-lock.json
 node_modules
 postgres-express-node/node_modules
 postgres-express-node/package-lock-json
+TypeScript/postgres-express-node/node_modules
+TypeScript/postgres-express-node/package-lock-json

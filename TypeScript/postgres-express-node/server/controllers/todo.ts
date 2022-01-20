@@ -1,26 +1,35 @@
-// const Todo = require('../models').;
-import Todo from '../models/todo';
-import TodoItem from '../models/todoitem';
+import { Request, Response } from "express";
+
+var process    = require('process');
+let _path      = process.cwd()
+const Todo     = require(_path + '/server/models').Todo;
+const TodoItem = require(_path + '/server/models').TodoItem;
 
 export = {
-    create(req,res){
-        return Todo.create({
+
+    async create(req:Request, res:Response){
+        return await Todo.create({
             title:req.body.title
         }).then(todo => res.status(201).send(todo))
           .catch(error => res.status(401).send(error));
     },
-    list(req,res){
-        return Todo.findAll({
-            include: [{
-              model: TodoItem,
-              as   : 'todoItems',
-            }],
-          })
-        .then((list) => res.status(200).send(list))
-        .catch((error) => res.status(400).send(error));
+
+    async list(req:Request,res:Response){
+        try{
+            let todoList =  await Todo.findAll({
+                include: [{
+                  model: TodoItem,
+                  as   : 'todoItems',
+                }],
+            });
+            return res.status(200).send(todoList);
+        }catch(error){
+            return res.status(401).send(error);
+        }
     },
-    retrieve(req,res){
-        return Todo.findOne({
+
+    async retrieve(req:Request,res:Response){
+        return await Todo.findOne({
             where:{
                 id: req.params.todoId
             },
@@ -35,35 +44,26 @@ export = {
             return res.status(200).send(item)
         }).catch(error => res.status(400).send(error))
     },
-    update(req,res){
-        return Todo.findOne({
-            where:{
-                id : req.params.todoId
-            },
-            include:[{
-                model: TodoItem,
-                as: 'todoItems'
-            }]
-        }).then(item => {
-            if(!item){
-                res.status(400).send({message:'todo not found'});
-            }
-            return item.update({
-                title: req.body.title || item.title
-            }).then(() =>  res.status(200).send(item))
-            .catch(error => res.status(401).send(error))
-        }).catch(error => res.status(400).send(error));
+
+    async update(req:Request,res:Response){
+        try{
+            await Todo.update({title:req.body.title},{
+                where : {id: req.params.todoId}
+            });
+            return res.status(200).send({error:false});
+        }catch{
+            return res.status(400).send({error:true});
+        }
     },
-    destroy(req,res){
-        return Todo.findOne({
-            where:{id:req.params.todoId}
-        })
-        .then(todo => {
-            if(!todo){
-                return res.status(400).send({message:'todo not found'})
-            }
-            return todo.destroy().then(() =>  res.status(204).send())
-            .catch((error) => res.status(400).send(error))
-        })
+
+    async destroy(req:Request,res:Response){
+        try{
+            await Todo.destroy({
+                where: {id: req.params.todoId}
+            });
+            return res.status(200).send({error:false, message: "Deleted successfully"});
+        }catch(error){
+            return res.status(500).send({error:true, message:"Something went wrong"});
+        }
     }
 }

@@ -1,72 +1,84 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
-// const Todo = require('../models').;
-const todo_1 = __importDefault(require("../models/todo"));
-const todoitem_1 = __importDefault(require("../models/todoitem"));
+var process = require('process');
+let _path = process.cwd();
+const Todo = require(_path + '/server/models').Todo;
+const TodoItem = require(_path + '/server/models').TodoItem;
 module.exports = {
     create(req, res) {
-        return todo_1.default.create({
-            title: req.body.title
-        }).then(todo => res.status(201).send(todo))
-            .catch(error => res.status(401).send(error));
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield Todo.create({
+                title: req.body.title
+            }).then(todo => res.status(201).send(todo))
+                .catch(error => res.status(401).send(error));
+        });
     },
     list(req, res) {
-        return todo_1.default.findAll({
-            include: [{
-                    model: todoitem_1.default,
-                    as: 'todoItems',
-                }],
-        })
-            .then((list) => res.status(200).send(list))
-            .catch((error) => res.status(400).send(error));
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let todoList = yield Todo.findAll({
+                    include: [{
+                            model: TodoItem,
+                            as: 'todoItems',
+                        }],
+                });
+                return res.status(200).send(todoList);
+            }
+            catch (error) {
+                return res.status(401).send(error);
+            }
+        });
     },
     retrieve(req, res) {
-        return todo_1.default.findOne({
-            where: {
-                id: req.params.todoId
-            },
-            include: [{
-                    model: todoitem_1.default,
-                    as: 'todoItems'
-                }],
-        }).then(item => {
-            if (!item) {
-                return res.status(400).send({ message: 'Todo not found' });
-            }
-            return res.status(200).send(item);
-        }).catch(error => res.status(400).send(error));
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield Todo.findOne({
+                where: {
+                    id: req.params.todoId
+                },
+                include: [{
+                        model: TodoItem,
+                        as: 'todoItems'
+                    }],
+            }).then(item => {
+                if (!item) {
+                    return res.status(400).send({ message: 'Todo not found' });
+                }
+                return res.status(200).send(item);
+            }).catch(error => res.status(400).send(error));
+        });
     },
     update(req, res) {
-        return todo_1.default.findOne({
-            where: {
-                id: req.params.todoId
-            },
-            include: [{
-                    model: todoitem_1.default,
-                    as: 'todoItems'
-                }]
-        }).then(item => {
-            if (!item) {
-                res.status(400).send({ message: 'todo not found' });
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield Todo.update({ title: req.body.title }, {
+                    where: { id: req.params.todoId }
+                });
+                return res.status(200).send({ error: false });
             }
-            return item.update({
-                title: req.body.title || item.title
-            }).then(() => res.status(200).send(item))
-                .catch(error => res.status(401).send(error));
-        }).catch(error => res.status(400).send(error));
+            catch (_a) {
+                return res.status(400).send({ error: true });
+            }
+        });
     },
     destroy(req, res) {
-        return todo_1.default.findOne({
-            where: { id: req.params.todoId }
-        })
-            .then(todo => {
-            if (!todo) {
-                return res.status(400).send({ message: 'todo not found' });
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield Todo.destroy({
+                    where: { id: req.params.todoId }
+                });
+                return res.status(200).send({ error: false, message: "Deleted successfully" });
             }
-            return todo.destroy().then(() => res.status(204).send())
-                .catch((error) => res.status(400).send(error));
+            catch (error) {
+                return res.status(500).send({ error: true, message: "Something went wrong" });
+            }
         });
     }
 };

@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const express_1 = __importDefault(require("express"));
 const todo_1 = __importDefault(require("../controllers/todo"));
 const todoItem_1 = __importDefault(require("../controllers/todoItem"));
-// import {validationRule, validate} from '../middlewares/validate';
-const { validationRule, validate } = require('../middlewares/validate');
+const validate_js_1 = require("../middlewares/validate.js");
+// const {validationRule, validate} = require('../middlewares/validate');
 let todoRouter = express_1.default.Router();
 todoRouter.get('/', todo_1.default.list);
-todoRouter.post('/', validationRule(), validate, todo_1.default.create);
+todoRouter.post('/', (0, validate_js_1.validationRule)(), validate_js_1.validate, todo_1.default.create);
 todoRouter.route('/:todoId')
     .get(todo_1.default.retrieve)
     .put(todo_1.default.update)

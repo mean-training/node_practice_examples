@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator/check')
+import {body, validationResult}  from 'express-validator/check';
 const validationRule = () => {
   return [
     body('title')

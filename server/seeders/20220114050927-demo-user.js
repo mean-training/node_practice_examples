@@ -1,12 +1,8 @@
 "use strict";
 
-const faker = require("faker");
 const fs = require("fs");
 const csv = require("csv-parser");
-const { table } = require("console");
-const user = require("../models/user");
 
-var count = 0;
 var users = [];
 
 module.exports = {

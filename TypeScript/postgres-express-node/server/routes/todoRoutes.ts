@@ -1,9 +1,9 @@
 import express from 'express';
 import todoController from '../controllers/todo';
 import todoItemController from '../controllers/todoItem';
-// import {validationRule, validate} from '../middlewares/validate';
+import {validationRule, validate} from '../middlewares/validate.js';
 
-const {validationRule, validate} = require('../middlewares/validate');
+// const {validationRule, validate} = require('../middlewares/validate');
 
 let todoRouter  = express.Router();
 

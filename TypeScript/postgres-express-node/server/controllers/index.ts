@@ -1,7 +1,7 @@
 import todo from './todo';
-
-// const todoItem = require('./todoItem');
+import todoItem from './todoItem';
 
 export = {
     todo,
+    todoItem
 }

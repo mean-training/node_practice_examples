@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   ActorMovies.init({
     ActorId: DataTypes.INTEGER,
     MovieId: DataTypes.INTEGER
-  },{timestamps:false}
+  },{timestamps:false},
   {
     sequelize,
     modelName: 'ActorMovies',
